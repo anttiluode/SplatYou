@@ -205,7 +205,8 @@ def inverse(args,decoder):
             image_rmse=float(np.sqrt(np.mean((fit-truth)**2)))
             direct_rmse=float(np.sqrt(np.mean((cv2.resize(baseline,(96,96),interpolation=cv2.INTER_CUBIC)[...,None]-truth)**2)))
             fit_noise=float(solved['observed_rmse'])
-            status=('MEASURED FORWARD CALIBRATION WEAK' if not f.metrics.get('forward_pass',False)
+            status=('CAMERA REPEATABILITY FAILED' if not f.metrics.get('camera_stability_pass',True)
+                    else 'MEASURED FORWARD CALIBRATION WEAK' if not f.metrics.get('forward_pass',False)
                     else 'POOR FIT / POSSIBLE MODEL MISMATCH' if fit_noise>max(.01,2.5*f.metrics['test_rmse'])
                     else 'OPTICAL FIT OK; IDENTITY MAY REMAIN AMBIGUOUS')
             entry=dict(query=query_i+1,mask=masks[index][0],status=status,
