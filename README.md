@@ -48,14 +48,14 @@ Keep the Samsung and screen fixed, diffuser in place, manual ISO/shutter/WB/focu
 
 ```bat
 python3.13 splatyou.py inverse --camera http://192.168.1.157:8080 ^
-  --zone 420 --patterns 120 --settle 0.8 --samples 2 --views 3 \
+  --zone 420 --patterns 120 --settle 0.8 --samples 2 --views 3 ^
   --output runs\physical01
 ```
 
 (Windows Command Prompt needs the whole command on one line, or `^` continuations rather than `\`.) The full-screen projection tells you when to press SPACE. The script:
 
 1. Measures black and white camera references through the installed diffuser. Rejects weak contrast, finds the physical illuminated region.
-2. Displays **120 known screen patterns**, measures their real S20 JPEG camera responses, and fits a linear ridge forward map of 8x8 screen intensities to 14x14 camera features. Holds out 16% of the patterns *before* fitting. Reports forward RMSE against a mean-image baseline. **If it loses the held-out gate, don't trust the inverse.**
+2. Displays **120 known screen patterns**, measures their real S20 JPEG camera responses, and fits a linear ridge forward map of 8x8 screen intensities to 14x14 camera features. Holds out 16% of the patterns *before* fitting. Reports forward RMSE against a mean-image baseline. **If it loses the held-out gate or the final repeated black/white reference drifts, don't trust the inverse.**
 3. Displays a new latent-generated face behind the diffuser, but passes **only camera readings** to the inverse routine. It searches authentic ONNX candidates and makes damped locally measured corrections in a small tangent chart. No target latent or target pixels enter the solver.
 4. It actively chooses which screen **mask** to query next using the currently weak SVD directions, *without looking at the unseen measurements*. It receives three physical observations with different known masks.
 5. Saves `report.json` with optical errors and an honest image-space comparison against a model-free regularized 8x8 reconstruction. `comparison.png` shows **target (evaluation only)** / face-prior reconstruction / pixel-only baseline. `last_camera.jpg` captures the last raw camera frame.
@@ -75,7 +75,7 @@ If the fit claims a confident face for this unrelated picture, that's a failure 
 
 ```bat
 python3.13 splatyou.py feedback ^
-  --calibration runs\physical01\calibration\forward.npz \
+  --calibration runs\physical01\calibration\forward.npz ^
   --settle 0.15 --samples 1 --gain 1.0 --output runs\resonator
 ```
 
