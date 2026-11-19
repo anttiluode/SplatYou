@@ -1,0 +1,16 @@
+{
+  "simulation_only": true,
+  "measured_forward_heldout": {
+    "test_rmse": 0.0010310610855135797,
+    "constant_baseline_rmse": 0.33468279295580794,
+    "train_camera_std": 0.3357263719450758,
+    "heldout": 40,
+    "trained": 210,
+    "signal_ratio": 324.6003,
+    "forward_pass": true
+  },
+  "initial_observation_rmse": 0.007654936030575007,
+  "final_observation_rmse": 5.967931385429184e-09,
+  "image_rmse": 1.7865865231669886e-08,
+  "note": "Synthetic forward and synthetic decoder; not physical evidence."
+}

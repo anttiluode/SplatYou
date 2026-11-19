@@ -1,0 +1,54 @@
+{
+  "mode": "physical_active_inverse",
+  "source": "held-out ONNX face",
+  "calibration": {
+    "test_rmse": 0.1237096747770175,
+    "constant_baseline_rmse": 0.23921110662723916,
+    "train_camera_std": 0.23381954321089354,
+    "heldout": 20,
+    "trained": 100,
+    "signal_ratio": 1.9336,
+    "forward_pass": true,
+    "camera_stability_pass": true,
+    "reference_drift_fraction": 0.05568,
+    "white_clipped_fraction": 0.0
+  },
+  "queries": [
+    {
+      "query": 1,
+      "mask": "whole",
+      "status": "OPTICAL FIT OK; IDENTITY MAY REMAIN AMBIGUOUS",
+      "observation_rmse": 0.03945800216332367,
+      "initial_rmse": 0.0771941677515898,
+      "groundtruth_pixel_rmse": 0.23055331408977509,
+      "direct_grid_pixel_rmse": 0.16725300117480993,
+      "artistic_radius": 16.392053604125977
+    },
+    {
+      "query": 2,
+      "mask": "anti-checker",
+      "status": "OPTICAL FIT OK; IDENTITY MAY REMAIN AMBIGUOUS",
+      "observation_rmse": 0.07305194658049029,
+      "initial_rmse": 0.09199602995102692,
+      "groundtruth_pixel_rmse": 0.2835162580013275,
+      "direct_grid_pixel_rmse": 0.25707711240833453,
+      "artistic_radius": 17.754785537719727
+    },
+    {
+      "query": 3,
+      "mask": "right",
+      "status": "OPTICAL FIT OK; IDENTITY MAY REMAIN AMBIGUOUS",
+      "observation_rmse": 0.07042816676463946,
+      "initial_rmse": 0.09068205958614224,
+      "groundtruth_pixel_rmse": 0.3167474567890167,
+      "direct_grid_pixel_rmse": 0.3176829972021782,
+      "artistic_radius": 14.549477577209473
+    }
+  ],
+  "chosen_masks": [
+    "whole",
+    "anti-checker",
+    "right"
+  ],
+  "claim": "2D measured optical forward + face-family prior; NOT 3D CT or identity proof"
+}

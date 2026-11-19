@@ -1,0 +1,19 @@
+{
+  "test_rmse": 0.1237096747770175,
+  "constant_baseline_rmse": 0.23921110662723916,
+  "train_camera_std": 0.23381954321089354,
+  "heldout": 20,
+  "trained": 100,
+  "signal_ratio": 1.9336,
+  "forward_pass": true,
+  "camera_stability_pass": true,
+  "reference_drift_fraction": 0.05568,
+  "white_clipped_fraction": 0.0,
+  "roi": [
+    978,
+    384,
+    712,
+    694
+  ],
+  "white_minus_black": 130.0
+}
