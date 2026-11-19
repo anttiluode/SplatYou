@@ -249,8 +249,25 @@ def acquire(projector, camera, decoder, *, grid=8, side=14, count=120,
         X.append(screen_features(rgb,grid));Y.append(f.observe(frame))
         if (i+1)%10==0 or i==0:
             print(f'Optical pairs: {i+1}/{count}',flush=True)
+    # Repeat the identical black/white inputs AFTER the sequence, rather than
+    # assuming the phone stayed locked throughout 120 measurements.
+    b_again=projector.capture(camera,black,settle,samples)
+    w_again=projector.capture(camera,white,settle,samples)
+    early_b=f.observe(b);early_w=f.observe(w)
+    late_b=f.observe(b_again);late_w=f.observe(w_again)
+    response_rms=float(np.sqrt(np.mean((early_w-early_b)**2)))
+    drift_rms=max(float(np.sqrt(np.mean((late_b-early_b)**2))),
+                  float(np.sqrt(np.mean((late_w-early_w)**2))))
+    drift_fraction=drift_rms/max(response_rms,1e-5)
+    x0,y0,rw,rh=roi
+    clipping=float(np.mean(w[y0:y0+rh,x0:x0+rw]>=252))
+    stable=bool(drift_fraction<.08 and clipping<.005)
     X=np.asarray(X);Y=np.asarray(Y)
     m=f.fit(X,Y)
+    m.update(camera_stability_pass=stable,reference_drift_fraction=round(drift_fraction,5),
+             white_clipped_fraction=round(clipping,5))
+    if not stable:
+        print('WARNING: black/white repeatability or clipping FAILED. Camera or rig likely drifted.')
     f.save(out/'forward.npz')
     np.savez_compressed(out/'paired_data.npz',X=X,Y=Y)
     (out/'report.json').write_text(json.dumps(dict(m,roi=roi,white_minus_black=range_peak),indent=2))
