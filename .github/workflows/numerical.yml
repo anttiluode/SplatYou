@@ -1,0 +1,21 @@
+name: SplatYou numerical gates
+on:
+  push:
+  pull_request:
+jobs:
+  unit-and-synthetic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy opencv-python-headless
+      - name: Run unit tests without camera or ONNX
+        run: python -m unittest discover -s tests -v
+      - name: Run explicit synthetic inverse test
+        run: python splatyou.py simulate --candidates 60 --steps 6 --output runs/synthetic_ci
+      - name: Verify simulation explicitly labelled
+        run: |
+          python -c "import json; d=json.load(open('runs/synthetic_ci/simulation.json')); assert d['simulation_only'] and d['final_observation_rmse'] < d['initial_observation_rmse']"
